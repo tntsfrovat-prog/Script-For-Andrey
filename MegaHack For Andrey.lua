@@ -1,6 +1,4 @@
--- Roblox Mobile Hack GUI Script by Colin
--- Optimized for mobile, small UI, with anti-tamper measures
-
+-- SATWARE CHEATS 2.0
 local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
 local UIS = game:GetService("UserInputService")
@@ -19,7 +17,7 @@ SafeCheck()
 
 -- Create main GUI
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "SATWARE CHEATS 2.0"
+ScreenGui.Name = "SATWARE_CHEATS_2.0"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -42,7 +40,7 @@ ToggleButton.Size = UDim2.new(1, 0, 1, 0)
 ToggleButton.Position = UDim2.new(0, 0, 0, 0)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 ToggleButton.BorderSizePixel = 0
-ToggleButton.Text = "Open GUI"
+ToggleButton.Text = "SATWARE 2.0"
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.TextSize = 14
 ToggleButton.Parent = MainFrame
@@ -68,10 +66,10 @@ UIListLayout.Padding = UDim.new(0, 5)
 ToggleButton.MouseButton1Click:Connect(function()
     FunctionFrame.Visible = not FunctionFrame.Visible
     if FunctionFrame.Visible then
-        ToggleButton.Text = "Close GUI"
+        ToggleButton.Text = "Close SATWARE"
         MainFrame.Size = UDim2.new(0, 200, 0, 180)
     else
-        ToggleButton.Text = "Open GUI"
+        ToggleButton.Text = "SATWARE 2.0"
         MainFrame.Size = UDim2.new(0, 200, 0, 30)
     end
 end)
