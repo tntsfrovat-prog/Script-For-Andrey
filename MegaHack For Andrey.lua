@@ -3,6 +3,7 @@ local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
 local UIS = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
+local RunService = game:GetService("RunService")
 
 -- Anti-ban obfuscation and stability measures
 local function SafeCheck()
@@ -40,7 +41,7 @@ ToggleButton.Size = UDim2.new(1, 0, 1, 0)
 ToggleButton.Position = UDim2.new(0, 0, 0, 0)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 ToggleButton.BorderSizePixel = 0
-ToggleButton.Text = "SATWARE 2.0"
+ToggleButton.Text = "SATWARE CHEATS 2.0"
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.TextSize = 14
 ToggleButton.Parent = MainFrame
@@ -62,16 +63,71 @@ UIListLayout.Parent = FunctionFrame
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 UIListLayout.Padding = UDim.new(0, 5)
 
+-- Make GUI draggable on mobile
+local dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+ToggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragStart = nil
+            end
+        end)
+    end
+end)
+
+ToggleButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragStart then
+        update(input)
+    end
+end)
+
 -- Toggle GUI visibility
 ToggleButton.MouseButton1Click:Connect(function()
     FunctionFrame.Visible = not FunctionFrame.Visible
     if FunctionFrame.Visible then
-        ToggleButton.Text = "Close SATWARE"
+        ToggleButton.Text = "CLOSE SATWARE CHEATS 2.0"
         MainFrame.Size = UDim2.new(0, 200, 0, 180)
     else
-        ToggleButton.Text = "SATWARE 2.0"
+        ToggleButton.Text = "SATWARE CHEATS 2.0"
         MainFrame.Size = UDim2.new(0, 200, 0, 30)
     end
+end)
+
+-- Global variables to maintain state after death
+local ESPEnabled = false
+local SpeedEnabled = false
+local JumpEnabled = false
+local ESPBoxes = {}
+
+-- Function to apply cheats to new character
+local function ApplyCheatsToCharacter(character)
+    if character and character:FindFirstChild("Humanoid") then
+        if SpeedEnabled then
+            character.Humanoid.WalkSpeed = 50
+        end
+        if JumpEnabled then
+            character.Humanoid.JumpPower = 100
+            character.Humanoid.JumpHeight = 100
+        end
+    end
+end
+
+-- Monitor for character respawn
+Player.CharacterAdded:Connect(function(character)
+    ApplyCheatsToCharacter(character)
 end)
 
 -- Function 1: ESP
@@ -84,9 +140,6 @@ ESPButton.Text = "ESP: OFF"
 ESPButton.TextColor3 = Color3.fromRGB(255, 100, 100)
 ESPButton.TextSize = 14
 ESPButton.Parent = FunctionFrame
-
-local ESPEnabled = false
-local ESPBoxes = {}
 
 ESPButton.MouseButton1Click:Connect(function()
     ESPEnabled = not ESPEnabled
@@ -128,7 +181,6 @@ SpeedButton.TextColor3 = Color3.fromRGB(255, 100, 100)
 SpeedButton.TextSize = 14
 SpeedButton.Parent = FunctionFrame
 
-local SpeedEnabled = false
 SpeedButton.MouseButton1Click:Connect(function()
     SpeedEnabled = not SpeedEnabled
     if SpeedEnabled then
@@ -157,7 +209,6 @@ JumpButton.TextColor3 = Color3.fromRGB(255, 100, 100)
 JumpButton.TextSize = 14
 JumpButton.Parent = FunctionFrame
 
-local JumpEnabled = false
 JumpButton.MouseButton1Click:Connect(function()
     JumpEnabled = not JumpEnabled
     if JumpEnabled then
@@ -165,22 +216,21 @@ JumpButton.MouseButton1Click:Connect(function()
         JumpButton.TextColor3 = Color3.fromRGB(100, 255, 100)
         if Player.Character and Player.Character:FindFirstChild("Humanoid") then
             Player.Character.Humanoid.JumpPower = 100
+            Player.Character.Humanoid.JumpHeight = 100
         end
     else
         JumpButton.Text = "HighJump: OFF"
         JumpButton.TextColor3 = Color3.fromRGB(255, 100, 100)
         if Player.Character and Player.Character:FindFirstChild("Humanoid") then
             Player.Character.Humanoid.JumpPower = 50
+            Player.Character.Humanoid.JumpHeight = 50
         end
     end
 end)
 
--- Mobile optimization: Prevent full-screen takeover
-UIS.TouchTap:Connect(function(input, processed)
-    if not processed then
-        -- Keep GUI on top
-        ScreenGui:SetTopmostCoreGui(true)
-    end
-end)
+-- Apply cheats to current character if already spawned
+if Player.Character then
+    ApplyCheatsToCharacter(Player.Character)
+end
 
 print("SATWARE CHEATS 2.0")
